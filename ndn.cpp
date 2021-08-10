@@ -5,6 +5,8 @@ using namespace std;
 
 #include "image.h"
 
+int imgIndex = 0;
+
 void print_output(Image outp, int rLevel){
     
     if( outp.hasTiles() ){
@@ -14,10 +16,14 @@ void print_output(Image outp, int rLevel){
         }
     }
     else{//if !hasTiles
-        if( outp.isBlack() ) //if is black
-            printf("%d Black ::  ", rLevel);
-        else//if white
-            printf("%d White ::  ", rLevel);
+        if( outp.isBlack() ){ //if is black
+            imgIndex++;
+            printf("RL::%d || [%d]::Black", rLevel, imgIndex);
+        }
+        else{//if white
+            imgIndex++;
+            printf("RL::%d || [%d]::White", rLevel, imgIndex);
+        }
     }
     printf("\n");
 }
@@ -66,31 +72,33 @@ Image merge(const Image& a, const Image& b) {
     }
 
 }
-int main()
-{
+
+void execute_reportCases(){
     //soft case 1
     Image img1(false, NULL);
     Image img2(true, NULL);
     Image out1 = merge(img1, img2);
-    printf("out1 -->");
+    printf("out1 -->\n");
     print_output(out1, 0);
     printf("\n\n");
 
 
     //soft case 2
+    imgIndex = 0;
     Image s1(false, NULL); //subImage
     Image s2 = Image(false, NULL);
     Image s3 = Image(false, NULL);
     Image s4 = Image(false, NULL);
     Image tile1[4] = {s1, s2, s3, s4};
     Image img3(false, tile1);
-    printf("img3 -->\n");print_output(img3, 0);
+    //printf("img3 -->\n");print_output(img3, 0);
     Image img4(true, NULL);
-    printf("img4 -->\n");print_output(img4, 0);
+    //printf("img4 -->\n");print_output(img4, 0);
     Image out2 = merge(img3, img4);
     printf("out2 -->\n");print_output(out2, 0);
 
     //soft case 3
+    imgIndex = 0;
     Image s11(true, NULL); //subImage
     Image s22 = Image(false, NULL);
     Image s33 = Image(false, NULL);
@@ -102,6 +110,7 @@ int main()
     printf("out3 -->\n");print_output(out3, 0);
 
     //Hard case 1
+    imgIndex = 0;
     Image q1 = Image(false, NULL); //subImage
     Image q2 = Image(false, NULL);
     Image q3 = Image(false, NULL);
@@ -121,6 +130,7 @@ int main()
     printf("out4 -->\n");print_output(out4, 0);
 
     //----Final Hard Case----||
+    imgIndex = 0;
     Image i1 = Image(false, NULL);
     Image t1[4] = {Image(true, NULL), Image(false, NULL), Image(false, NULL), Image(false, NULL)};
     Image i2 = Image(false, t1);
@@ -167,7 +177,12 @@ int main()
     //merge
     Image out5 = merge(imgA, imgB);
      printf("out5 -->\n");print_output(out5, 0);
+}
 
 
+
+int main()
+{
+    execute_reportCases();
     return 0;
 }

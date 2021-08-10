@@ -1,12 +1,12 @@
 #include "image.h"
 
-    //Constructor
+    //Constructors
     Image::Image(bool _is_black, Image *_tiles){
         is_black_ = _is_black;
         if( _tiles == NULL){} //if empty
 
         else{
-            tiles = (Image*)malloc(sizeof(Image)*4);//create 4 postitions
+            tiles = (Image*)malloc(sizeof(Image)*4);//create 4 Image postitions
             for(int i = 0; i < 4; i++){
                 tiles[i] = _tiles[i];
             }
