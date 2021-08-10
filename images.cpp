@@ -1,20 +1,26 @@
-/******************************************************************************
-
-                              Online C++ Compiler.
-               Code, Compile, Run and Debug C++ program online.
-Write your code in this editor and press "Run" button to compile and execute it.
-
-*******************************************************************************/
-
 #include <iostream>
 
 using namespace std;
 
 class Image{
-    public:
+    private:
         bool is_black_;
         Image * tiles;
-        
+
+    public:
+        //Constructor
+        Image(bool _is_black, Image * _tiles){
+            is_black_ = _is_black;
+            if(_tiles == NULL)
+                return;
+            else{
+                tiles = (Image*)malloc(sizeof(Image)*4);//with 4 indexes
+                for(int i = 0; i < 4; i++){
+                    tiles[i] = _tiles[i];
+                }
+            }
+        }
+        //Getters
         bool hasTiles() const{
             if(tiles == NULL)
                 return false;
@@ -26,37 +32,53 @@ class Image{
             return is_black_;
         }
         
-        void painted(){
-            if( tiles != NULL ){//
+        Image getTiles(int index) const{
+            return tiles[index];
+        }
+        
+        //Setters
+        void setBlack() {
+            is_black_ = true;
+        }
+
+        void setWhite(){
+            is_black_ = false;
+        }
+        
+        //Methods
+        void paintAllBlack(){
+            if( tiles != NULL ){//if it has tiles
                 for(int i = 0; i < 4; i++){
-                    tiles[i].painted();
+                    getTiles(i).paintAllBlack();
                 }
             }
-            is_black_ = true;
+            setBlack();
         }
 };
 
 Image merge(const Image& a, const Image& b) {
-    Image imgResult;
+    Image imgResult(false, NULL);//false and empty by default
     
     if( a.hasTiles() ){
         if( b.hasTiles() ){
             //"Hard" case (both imgs have tiles)
             for(int i = 0; i < 4; i++){
-                imgResult.tiles[i] = merge(a.tiles[i], b.tiles[i]);
+                imgResult.getTiles(i) = merge(a.getTiles(i), b.getTiles(i));
             }
+            imgResult.setBlack();
+            return imgResult;
         }
         else{
             return a;
         }
     }
-    else{// ! a.hasTiles
+    else{ // !a.hasTiles
         if( b.hasTiles() ){
             if( a.isBlack() ){
-                b.painted();
-                return imgResult = b;
+                imgResult = b;
+                imgResult.paintAllBlack();
+                return imgResult;
             }
-                
             else
                 return b;
         }
